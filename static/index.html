@@ -40,7 +40,11 @@
 
     <footer>
       <div id="recording-indicator" class="hidden">🎙️ Enregistrement…</div>
+      <div id="vad-listening" class="hidden">👂 En écoute…</div>
       <div class="footer-controls">
+        <button id="btn-vad" onclick="toggleVAD()" title="Activer la détection automatique">
+          🤖
+        </button>
         <button id="btn-mic"
           onmousedown="startRecording()"
           onmouseup="stopRecording()"
@@ -52,7 +56,7 @@
           🔊
         </button>
       </div>
-      <div class="footer-hint">Maintenir 🎤 pour parler · 🔊 pour lire la traduction</div>
+      <div class="footer-hint">🤖 Auto · 🎤 Maintenir pour parler · 🔊 Lecture vocale</div>
     </footer>
   </div>
 
