@@ -1,8 +1,26 @@
 # 💬 Projet Olivia
 
+![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.135-green?logo=fastapi)
+![Whisper](https://img.shields.io/badge/Whisper-small-orange?logo=openai)
+![LibreTranslate](https://img.shields.io/badge/LibreTranslate-1.9-purple)
+![Langues](https://img.shields.io/badge/Langues-FR%20%E2%86%94%20EN-red)
+![100% Local](https://img.shields.io/badge/100%25-Local-darkgreen)
+![Licence MIT](https://img.shields.io/badge/Licence-MIT-yellow)
+![POC Validé](https://img.shields.io/badge/POC-Validé%20✅-brightgreen)
+
 Application de conversation bilingue en temps réel, permettant à deux personnes de se parler malgré la barrière de la langue.
 
 **Exemple d'usage :** Louise (🇫🇷 français) et Olivia (🇺🇸 anglais) peuvent se parler naturellement — chacune parle dans sa langue, l'autre voit la traduction instantanément.
+
+ ## 🌍 Langues supportées
+
+    | Langue | Code | Statut |
+    |--------|------|--------|
+    | Français | `fr` | ✅ Supporté |
+    | Anglais  | `en` | ✅ Supporté |
+    | Espagnol | `es` | 🔜 Prochainement |
+    | Allemand | `de` | 🔜 Prochainement |
 
 ## ✨ Fonctionnalités
 
