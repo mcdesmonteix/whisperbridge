@@ -19,6 +19,7 @@ Application de conversation bilingue en temps réel, permettant à deux personne
     |--------|------|--------|
     | Français | `fr` | ✅ Supporté |
     | Anglais  | `en` | ✅ Supporté |
+    | Italien  | `it` | 🔜 Prochainement |
     | Espagnol | `es` | 🔜 Prochainement |
     | Allemand | `de` | 🔜 Prochainement |
 
