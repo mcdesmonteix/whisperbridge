@@ -13,7 +13,34 @@ Application de conversation bilingue en temps réel, permettant à deux personne
 
 **Exemple d'usage :** Louise (🇫🇷 français) et Olivia (🇺🇸 anglais) peuvent se parler naturellement — chacune parle dans sa langue, l'autre voit la traduction instantanément.
 
- ## 🌍 Langues supportées
+## 🎬 Démonstration
+
+<video src="docs/media/demo.mov" controls width="100%"></video>
+
+> Si la vidéo ne s'affiche pas, [cliquez ici pour la télécharger](docs/media/demo.mov).
+
+## 📸 Captures d'écran
+
+<table>
+  <tr>
+    <td align="center"><b>Écran de sélection</b></td>
+    <td align="center"><b>Conversation en temps réel</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/screenshot-01-selection.png" alt="Écran de sélection"/></td>
+    <td><img src="docs/media/screenshot-02-conversation.png" alt="Conversation"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Vue Olivia (EN)</b></td>
+    <td align="center"><b>Logs serveur</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/screenshot-03-olivia.png" alt="Vue Olivia"/></td>
+    <td><img src="docs/media/screenshot-04-terminal.png" alt="Terminal serveur"/></td>
+  </tr>
+</table>
+
+## 🌍 Langues supportées
 
     | Langue | Code | Statut |
     |--------|------|--------|
@@ -119,7 +146,8 @@ projet-olivia/
 ## 🗺️ Roadmap
 
 - [x] POC — conversation FR ↔ EN sur réseau local (validé le 14/04/2026)
-- [ ] Synthèse vocale (TTS) — lecture automatique des traductions
+- [x] Synthèse vocale (TTS) — lecture automatique des traductions
+- [x] Script de démarrage unique (`./start_all.sh`)
 - [ ] Support d'autres langues (ES, DE, IT…)
 - [ ] Test sur internet via Ngrok
 - [ ] App Electron / PWA mobile
