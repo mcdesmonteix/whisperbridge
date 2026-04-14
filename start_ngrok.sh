@@ -11,8 +11,8 @@ cleanup() {
 }
 trap cleanup SIGINT SIGTERM
 
-echo "🌍 Démarrage de LibreTranslate (14 langues)..."
-.venv/bin/libretranslate --load-only fr,en,es,de,it,pt,nl,pl,ru,zh,ja,ar,ko,tr --port 5001 &
+echo "🌍 Démarrage de LibreTranslate (8 langues)..."
+.venv/bin/libretranslate --load-only fr,en,zh,ar,ru,es,it,pt --port 5001 &
 LT_PID=$!
 
 printf "   En attente"

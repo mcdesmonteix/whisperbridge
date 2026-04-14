@@ -1,19 +1,13 @@
 // ── Configuration des langues ──
 const LANGUAGES = {
-  fr: { name: "Français",   flag: "🇫🇷", ttsLang: "fr-FR" },
-  en: { name: "English",    flag: "🇬🇧", ttsLang: "en-US" },
-  es: { name: "Español",    flag: "🇪🇸", ttsLang: "es-ES" },
-  de: { name: "Deutsch",    flag: "🇩🇪", ttsLang: "de-DE" },
-  it: { name: "Italiano",   flag: "🇮🇹", ttsLang: "it-IT" },
-  pt: { name: "Português",  flag: "🇵🇹", ttsLang: "pt-PT" },
-  nl: { name: "Nederlands", flag: "🇳🇱", ttsLang: "nl-NL" },
-  pl: { name: "Polski",     flag: "🇵🇱", ttsLang: "pl-PL" },
-  ru: { name: "Русский",    flag: "🇷🇺", ttsLang: "ru-RU" },
-  zh: { name: "中文",        flag: "🇨🇳", ttsLang: "zh-CN" },
-  ja: { name: "日本語",      flag: "🇯🇵", ttsLang: "ja-JP" },
-  ar: { name: "العربية",    flag: "🇸🇦", ttsLang: "ar-SA" },
-  ko: { name: "한국어",      flag: "🇰🇷", ttsLang: "ko-KR" },
-  tr: { name: "Türkçe",     flag: "🇹🇷", ttsLang: "tr-TR" },
+  fr: { name: "Français",  flag: "🇫🇷", ttsLang: "fr-FR" },
+  en: { name: "English",   flag: "🇬🇧", ttsLang: "en-US" },
+  zh: { name: "中文",       flag: "🇨🇳", ttsLang: "zh-CN" },
+  ar: { name: "العربية",   flag: "🇸🇦", ttsLang: "ar-SA" },
+  ru: { name: "Русский",   flag: "🇷🇺", ttsLang: "ru-RU" },
+  es: { name: "Español",   flag: "🇪🇸", ttsLang: "es-ES" },
+  it: { name: "Italiano",  flag: "🇮🇹", ttsLang: "it-IT" },
+  pt: { name: "Português", flag: "🇵🇹", ttsLang: "pt-PT" },
 };
 
 // ── État ──
