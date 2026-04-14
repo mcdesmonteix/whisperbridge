@@ -3,7 +3,10 @@ let userLang = null;
 let ws = null;
 let mediaRecorder = null;
 let audioChunks = [];
-let ttsEnabled = true;
+// Sur mobile, TTS désactivé par défaut (nécessite un geste utilisateur sur iOS)
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+let ttsEnabled = !isMobile;
+let ttsUnlocked = false;
 
 const USERS = {
   louise: { lang: "fr", flag: "🇫🇷", label: "Louise", ttsLang: "fr-FR" },
@@ -122,7 +125,17 @@ function speak(text, lang) {
 
 function toggleTTS() {
   ttsEnabled = !ttsEnabled;
-  if (!ttsEnabled) window.speechSynthesis?.cancel();
+  if (!ttsEnabled) {
+    window.speechSynthesis?.cancel();
+  } else {
+    // Déverrouille l'audio iOS au premier clic utilisateur
+    if (!ttsUnlocked && window.speechSynthesis) {
+      const unlock = new SpeechSynthesisUtterance(" ");
+      unlock.volume = 0;
+      window.speechSynthesis.speak(unlock);
+      ttsUnlocked = true;
+    }
+  }
   updateTTSButton();
 }
 
