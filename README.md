@@ -15,6 +15,31 @@ Chaque conversation se crée en un clic et génère un lien unique à partager. 
 
 > 🌐 **Instance publique disponible sur [`https://whisperbridge.duckdns.org`](https://whisperbridge.duckdns.org)**
 
+![WhisperBridge branding](docs/media/branding.png)
+
+---
+
+## 📸 Aperçu
+
+<table>
+  <tr>
+    <td align="center"><b>Écran de connexion</b></td>
+    <td align="center"><b>Sélection de la langue</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/screenshot-login.png" alt="Écran de connexion"/></td>
+    <td><img src="docs/media/screenshot-languages.png" alt="Sélecteur de langues"/></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Conversation en cours (salle privée)</b></td>
+    <td align="center"><b>Vue mobile</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/media/screenshot-chat.png" alt="Interface conversation"/></td>
+    <td><img src="docs/media/screenshot-login-mobile.png" alt="Vue mobile"/></td>
+  </tr>
+</table>
+
 ---
 
 ## ✨ Fonctionnalités
