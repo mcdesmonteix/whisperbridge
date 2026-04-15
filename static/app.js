@@ -252,6 +252,12 @@ function speak(text, lang) {
   const utt = new SpeechSynthesisUtterance(text);
   utt.lang = lang;
   utt.rate = 0.95;
+
+  // Pause le VAD pendant que le TTS parle pour éviter la boucle de feedback
+  utt.onstart = () => { if (vadActive) vadDetecting = false; };
+  utt.onend   = () => { if (vadActive) { vadDetecting = true; requestAnimationFrame(detectVoice); } };
+  utt.onerror = () => { if (vadActive) { vadDetecting = true; requestAnimationFrame(detectVoice); } };
+
   window.speechSynthesis.speak(utt);
 }
 
