@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhisperBridge — Mockup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f0f0f5;
+      font-family: -apple-system, sans-serif;
+    }
+
+    .iphone-frame {
+      width: 300px;
+      height: 600px;
+      background: #1a1a1e;
+      border-radius: 50px;
+      border: 7px solid #3a3a3e;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px #555,
+        0 40px 100px rgba(0,0,0,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    /* Boutons latéraux */
+    .iphone-frame::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 110px;
+      width: 4px;
+      height: 36px;
+      background: #3a3a3e;
+      border-radius: 2px 0 0 2px;
+      box-shadow: 0 50px 0 #3a3a3e;
+    }
+    .iphone-frame::after {
+      content: '';
+      position: absolute;
+      right: -10px;
+      top: 140px;
+      width: 4px;
+      height: 60px;
+      background: #3a3a3e;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .iphone-notch {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #1a1a1e;
+      border-radius: 0 0 22px 22px;
+      z-index: 10;
+    }
+
+    .iphone-screen {
+      position: absolute;
+      inset: 0;
+      border-radius: 43px;
+      overflow: hidden;
+      background: #fff;
+      padding: 36px 0 28px;
+    }
+
+    .iphone-screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: top;
+    }
+
+    .iphone-home-bar {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 2px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="iphone-frame">
+    <div class="iphone-notch"></div>
+    <div class="iphone-screen">
+      <img src="media/screenshots/login-minimal-en.png" alt="WhisperBridge" />
+    </div>
+    <div class="iphone-home-bar"></div>
+  </div>
+</body>
+</html>
