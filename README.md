@@ -22,8 +22,8 @@ Chaque conversation se crée en un clic et génère un lien unique à partager. 
 ## 📸 Aperçu
 
 <div align="center">
-  <img src="docs/media/screenshots/mockup-participants.png" width="45%" alt="Participants connectés" />
-  <img src="docs/media/screenshots/mockup-conversation.png" width="45%" alt="Conversation traduite" />
+  <img src="docs/media/screen-start.png" width="45%" alt="Participants connectés" />
+  <img src="docs/media/screen-conv.png.png" width="45%" alt="Conversation traduite" />
 </div>
 
 > 🎠 Carrousel interactif disponible sur [mcdesmonteix.github.io/whisperbridge](https://mcdesmonteix.github.io/whisperbridge/#screenshots)
