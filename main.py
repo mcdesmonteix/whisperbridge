@@ -81,7 +81,7 @@ async def broadcast_room(room_id: str, message: dict, exclude: str = None):
 
 @app.get("/room/{room_id}")
 async def room_page(room_id: str):
-    return FileResponse("static/index.html")
+    return FileResponse("static/index.html", headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 
 @app.websocket("/ws/{room_id}/{session_id}")
@@ -164,7 +164,7 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str, session_id: str
 
 @app.get("/")
 async def root():
-    return FileResponse("static/index.html")
+    return FileResponse("static/index.html", headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
