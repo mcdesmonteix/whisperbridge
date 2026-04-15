@@ -287,6 +287,8 @@ body {
 
 .app-logo {
   margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
 }
 .app-logo img {
   width: 80px;
