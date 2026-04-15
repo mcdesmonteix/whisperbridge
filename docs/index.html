@@ -100,6 +100,7 @@
             <div class="iphone-notch"></div>
             <div class="iphone-screen">
               <div class="iphone-slides" id="carouselSlides">
+                <img src="media/screenshots/00-login.png"      alt="Écran d'accueil" />
                 <img src="media/screenshots/01-connexion.png"  alt="Connexion" />
                 <img src="media/screenshots/02-participants.png" alt="Participants connectés" />
                 <img src="media/screenshots/03-mode-auto.png"  alt="Mode automatique" />
@@ -126,6 +127,7 @@
       <button class="dot" data-index="3"></button>
       <button class="dot" data-index="4"></button>
       <button class="dot" data-index="5"></button>
+      <button class="dot" data-index="6"></button>
     </div>
   </section>
 
@@ -191,6 +193,7 @@ cd whisperbridge
     // Carrousel
     const captions = [
       "WhisperBridge — traduction vocale en temps réel",
+      "Une interface épurée, prête en un instant",
       "Connexion en un clic, sans compte",
       "Vos interlocuteurs apparaissent en temps réel",
       "Mode auto — parlez naturellement, WhisperBridge écoute",
@@ -198,7 +201,7 @@ cd whisperbridge
       "Chaque message traduit instantanément dans les deux langues"
     ];
     const TOTAL = captions.length;
-    const PHONE_SLIDES = TOTAL - 1; // 5 slides dans le téléphone
+    const PHONE_SLIDES = TOTAL - 1; // 6 slides dans le téléphone
 
     let current = 0;
     let autoTimer;
