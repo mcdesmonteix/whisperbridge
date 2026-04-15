@@ -9,55 +9,68 @@
 ![Licence MIT](https://img.shields.io/badge/Licence-MIT-yellow)
 ![En ligne](https://img.shields.io/badge/En%20ligne-whisperbridge.duckdns.org-brightgreen)
 
-Application de conversation multilingue en temps réel. Chaque participant choisit son prénom et sa langue — la traduction est instantanée et automatique.
+**Application de traduction vocale en temps réel.** Parlez dans votre langue — vos interlocuteurs vous comprennent dans la leur, instantanément.
 
-**Exemple d'usage :** Louise (🇫🇷) et Olivia (🇺🇸) parlent chacune dans leur langue, et se comprennent en temps réel. Nuria (🇪🇸) peut rejoindre la conversation à tout moment.
+Chaque conversation se crée en un clic et génère un lien unique à partager. Aucune installation côté client.
 
 > 🌐 **Instance publique disponible sur [`https://whisperbridge.duckdns.org`](https://whisperbridge.duckdns.org)**
 
-## 🎬 Démonstration
+---
 
-<video src="docs/media/demo.mov" controls width="100%"></video>
+## ✨ Fonctionnalités
 
-> Si la vidéo ne s'affiche pas, [cliquez ici pour la télécharger](docs/media/demo.mov).
+- 🎤 **Transcription vocale** locale via [Whisper](https://github.com/openai/whisper) — small (FR/EN/ES/IT/PT) et medium (ZH/AR/RU)
+- 🌍 **Traduction multilingue** via [LibreTranslate](https://libretranslate.com/) — 100% local, 8 langues
+- 🔗 **Salles privées** — chaque conversation a son URL unique (`/room/abc123`), isolée des autres
+- 🔄 **Temps réel** via WebSockets — plusieurs participants simultanés
+- 🤖 **Mode VAD** — détection automatique de la voix, mains libres
+- 🔊 **Synthèse vocale (TTS)** — lecture automatique des traductions
+- 🎨 **4 thèmes visuels** — sélectionnables et mémorisés
+- 🌐 **Interface web** — aucune installation côté client
+- 🔒 **100% local** — aucune donnée envoyée à des services tiers
 
-## 📸 Captures d'écran
+---
 
-<table>
-  <tr>
-    <td align="center"><b>Écran de connexion</b></td>
-    <td align="center"><b>Conversation en temps réel</b></td>
-  </tr>
-  <tr>
-    <td><img src="docs/media/screenshot-01-selection.png" alt="Écran de connexion"/></td>
-    <td><img src="docs/media/screenshot-02-conversation.png" alt="Conversation"/></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Vue Olivia (EN)</b></td>
-    <td align="center"><b>Logs serveur</b></td>
-  </tr>
-  <tr>
-    <td><img src="docs/media/screenshot-03-olivia.png" alt="Vue Olivia"/></td>
-    <td><img src="docs/media/screenshot-04-terminal.png" alt="Terminal serveur"/></td>
-  </tr>
-</table>
+## 🚀 Utilisation rapide
+
+### Instance publique (recommandé)
+
+Ouvre [`https://whisperbridge.duckdns.org`](https://whisperbridge.duckdns.org) dans ton navigateur.
+
+1. Entre ton prénom et ta langue
+2. Clique **Créer une conversation** → une URL unique est générée
+3. Clique **🔗 Partager le lien** et envoie-le à tes interlocuteurs
+4. Parlez chacun dans votre langue
+
+### Auto-hébergement
+
+```bash
+git clone https://github.com/mcdesmonteix/whisperbridge.git
+cd whisperbridge
+chmod +x setup.sh
+./setup.sh
+```
+
+Voir les sections détaillées ci-dessous pour macOS, Windows et le déploiement serveur.
+
+---
 
 ## 🌍 Langues supportées
 
-| Drapeau | Langue | Code |
-|---------|--------|------|
-| 🇫🇷 | Français | `fr` |
-| 🇬🇧 | English | `en` |
-| 🇨🇳 | 中文 Mandarin | `zh` |
-| 🇸🇦 | العربية Arabe | `ar` |
-| 🇷🇺 | Русский Russe | `ru` |
-| 🇪🇸 | Español | `es` |
-| 🇮🇹 | Italiano | `it` |
-| 🇵🇹 | Português | `pt` |
+| Drapeau | Langue | Code | Modèle Whisper |
+|---------|--------|------|----------------|
+| 🇫🇷 | Français | `fr` | small |
+| 🇬🇧 | English | `en` | small |
+| 🇪🇸 | Español | `es` | small |
+| 🇮🇹 | Italiano | `it` | small |
+| 🇵🇹 | Português | `pt` | small |
+| 🇨🇳 | 中文 Mandarin | `zh` | medium |
+| 🇸🇦 | العربية Arabe | `ar` | medium |
+| 🇷🇺 | Русский Russe | `ru` | medium |
+
+---
 
 ## 🎨 Thèmes visuels
-
-L'interface propose 4 thèmes, sélectionnables avant ou pendant la conversation. Le choix est sauvegardé automatiquement.
 
 | # | Thème | Style |
 |---|-------|-------|
@@ -66,65 +79,53 @@ L'interface propose 4 thèmes, sélectionnables avant ou pendant la conversation
 | ⬜ | **Minimaliste** | Blanc et noir, typographie épurée |
 | 🌸 | **Vivid** | Coloré et chaleureux, chaque utilisateur a sa couleur |
 
-## ✨ Fonctionnalités
-
-- 🎤 **Transcription vocale** locale via [Whisper](https://github.com/openai/whisper) (small pour FR/EN/ES/IT/PT, medium pour ZH/AR/RU)
-- 🌍 **Traduction multilingue** via [LibreTranslate](https://libretranslate.com/) (100% local, 8 langues)
-- 🔄 **Temps réel** via WebSockets — plusieurs participants simultanés
-- 🤖 **Mode VAD** — détection automatique de la voix, mains libres
-- 🔊 **Synthèse vocale (TTS)** — lecture automatique des traductions
-- 🎨 **4 thèmes visuels** — sélectionnables et mémorisés
-- 🌐 **Interface web** — aucune installation côté client
-- 🔒 **100% local** — aucune donnée envoyée sur un serveur externe
-- 🖥️ **Cross-platform** — Mac, Windows, Linux
+---
 
 ## 🏗️ Architecture
 
 ```
 Utilisateur A parle (FR)
     └─▶ Whisper transcrit en français
-        └─▶ LibreTranslate traduit vers chaque langue présente
+        └─▶ LibreTranslate traduit vers chaque langue présente dans la salle
             ├─▶ Utilisateur B (EN) reçoit la traduction anglaise
             ├─▶ Utilisateur C (ES) reçoit la traduction espagnole
             └─▶ Utilisateur A (FR) voit son texte original
+
+Salles isolées : /room/abc123 ≠ /room/xyz789
+Chaque salle est indépendante — les messages ne se croisent pas.
 ```
 
-## 📋 Prérequis
+---
 
-- Python 3.11+ — [python.org](https://python.org)
-- FFmpeg — [ffmpeg.org](https://ffmpeg.org)
-- mkcert — [github.com/FiloSottile/mkcert](https://github.com/FiloSottile/mkcert)
-- ~1.5 Go d'espace disque (modèles Whisper medium + LibreTranslate 8 langues)
+## 📋 Prérequis (auto-hébergement)
+
+- Python 3.11+
+- FFmpeg
+- mkcert (pour HTTPS local)
+- ~1.5 Go d'espace disque (modèles Whisper + LibreTranslate 8 langues)
 - Microphone
 
-## 🚀 Installation
+---
+
+## 🖥️ Installation locale
 
 ### 🍎 macOS
 
 ```bash
-git clone https://github.com/mcdesmonteix/projet-olivia.git
-cd projet-olivia
+git clone https://github.com/mcdesmonteix/whisperbridge.git
+cd whisperbridge
 chmod +x setup.sh start_all.sh start_ngrok.sh
 ./setup.sh
 ```
 
-> Tu peux aussi utiliser directement l'instance publique sur **[whisperbridge.duckdns.org](https://whisperbridge.duckdns.org)** sans aucune installation.
-
-Le script installe automatiquement les dépendances via Homebrew et télécharge les modèles.
-
 ### 🪟 Windows
 
-1. Installer [Python 3.11+](https://python.org/downloads/), [FFmpeg](https://ffmpeg.org/download.html) et [mkcert](https://github.com/FiloSottile/mkcert/releases)
-2. Cloner le projet et ouvrir un terminal dans le dossier :
 ```bat
-git clone https://github.com/mcdesmonteix/projet-olivia.git
-cd projet-olivia
+git clone https://github.com/mcdesmonteix/whisperbridge.git
+cd whisperbridge
 python -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
-```
-3. Télécharger les modèles :
-```bat
-.venv\Scripts\python -c "from faster_whisper import WhisperModel; WhisperModel('medium')"
+.venv\Scripts\python -c "from faster_whisper import WhisperModel; WhisperModel('small'); WhisperModel('medium')"
 .venv\Scripts\libretranslate --load-only fr,en,zh,ar,ru,es,it,pt --update-files
 ```
 
@@ -132,171 +133,58 @@ python -m venv .venv
 
 ## ▶️ Lancement
 
-### Cas 1 — Même réseau local (domicile, bureau)
+### Réseau local (même Wi-Fi)
 
-> Deux ordinateurs sur le même Wi-Fi, ou ordi + téléphone sur le même réseau.
-
-**macOS — une seule commande :**
 ```bash
 ./start_all.sh
 ```
 
-**Windows — deux terminaux :**
+### Internet via Ngrok
 
-Terminal 1 :
-```bat
-.venv\Scripts\libretranslate --load-only fr,en,zh,ar,ru,es,it,pt --port 5001
-```
-
-Terminal 2 :
-```bat
-ipconfig
-REM Repérer l'IP locale (ex: 192.168.X.X)
-mkcert 192.168.X.X localhost 127.0.0.1
-.venv\Scripts\uvicorn main:app --host 0.0.0.0 --port 8000 --ssl-certfile 192.168.X.X+2.pem --ssl-keyfile 192.168.X.X+2-key.pem
-```
-
-**Comment se connecter :**
-
-| Appareil | Adresse à ouvrir |
-|----------|-----------------|
-| L'ordinateur serveur | `https://localhost:8000` |
-| Autre ordinateur (même Wi-Fi) | `https://192.168.X.X:8000` *(remplacer par ton IP locale)* |
-| Téléphone (même Wi-Fi) | `https://192.168.X.X:8000` *(idem)* |
-
-> La première fois, le navigateur affiche un avertissement SSL (certificat auto-signé).  
-> Cliquer sur **"Paramètres avancés"** → **"Continuer quand même"**.  
-> Sur iPhone : **"Afficher les détails"** → **"Visiter ce site web"**.
-
----
-
-### Cas 3 — Serveur permanent (recommandé)
-
-> Aucune installation requise. Fonctionne 24h/24 sans laisser son ordinateur allumé.
-
-Ouvrir directement **[https://whisperbridge.duckdns.org](https://whisperbridge.duckdns.org)** dans n'importe quel navigateur.
-
-- Hébergé sur Oracle Cloud Free Tier (ARM, 4 cœurs, 24 Go RAM)
-- HTTPS automatique via Caddy + Let's Encrypt
-- Démarrage automatique au boot
-
----
-
-### Cas 2 — Longue distance via internet (Ngrok)
-
-> Un participant est à l'étranger, sur un réseau différent.
-
-#### Étape 1 — Installer et configurer Ngrok
-
-**macOS :**
-```bash
-brew install ngrok
-```
-
-**Windows :** Télécharger sur [ngrok.com/download](https://ngrok.com/download) et ajouter au PATH.
-
-Créer un compte gratuit sur [ngrok.com](https://ngrok.com), copier son token et l'enregistrer :
-```bash
-ngrok config add-authtoken TON_TOKEN_NGROK
-```
-
-#### Étape 2 — Lancer le serveur (sans SSL)
-
-**macOS :**
 ```bash
 ./start_ngrok.sh
-```
-
-**Windows — deux terminaux :**
-
-Terminal 1 :
-```bat
-.venv\Scripts\libretranslate --load-only fr,en,zh,ar,ru,es,it,pt --port 5001
-```
-
-Terminal 2 :
-```bat
-.venv\Scripts\uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-#### Étape 3 — Ouvrir le tunnel Ngrok
-
-Dans un **nouveau terminal** :
-```bash
+# Puis dans un autre terminal :
 ngrok http 8000
 ```
 
-Ngrok affiche une URL de ce type :
-```
-Forwarding   https://abc123.ngrok-free.app → http://localhost:8000
-```
+### Serveur permanent (production)
 
-#### Étape 4 — Partager l'URL
-
-Envoie l'URL `https://abc123.ngrok-free.app` à l'autre personne (par SMS, WhatsApp, email…).
-
-**Les deux participants ouvrent la même URL** dans leur navigateur — que ce soit sur ordinateur ou téléphone, n'importe où dans le monde.
-
-> ✅ Ngrok fournit déjà le HTTPS — pas besoin de certificat SSL.  
-> ⚠️ Le lien change à chaque redémarrage de Ngrok (version gratuite).
-
----
-
-#### Récapitulatif des connexions
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Réseau local (même Wi-Fi)                                   │
-│                                                              │
-│  Serveur (Mac/PC)  ──────────────────────────────────────   │
-│       ↕                                                      │
-│  Autre PC          →  https://192.168.x.x:8000              │
-│  Téléphone         →  https://192.168.x.x:8000              │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│  Longue distance (Ngrok)                                     │
-│                                                              │
-│  Serveur (Mac/PC)                                            │
-│       ↕ ngrok http 8000                                      │
-│  https://abc123.ngrok-free.app                               │
-│       ↕                                                      │
-│  N'importe quel appareil dans le monde                       │
-│  (PC, Mac, iPhone, Android)                                  │
-└─────────────────────────────────────────────────────────────┘
-```
+Déployé sur Oracle Cloud Free Tier avec Caddy + Let's Encrypt.  
+Voir [`https://whisperbridge.duckdns.org`](https://whisperbridge.duckdns.org).
 
 ---
 
 ## 📁 Structure du projet
 
 ```
-projet-olivia/
-├── main.py                  # Serveur FastAPI + WebSockets + Whisper + LibreTranslate
+whisperbridge/
+├── main.py                  # Serveur FastAPI + WebSockets + Whisper + LibreTranslate + Salles
 ├── start_all.sh             # Lancement réseau local (avec SSL)
 ├── start_ngrok.sh           # Lancement internet via Ngrok (sans SSL)
 ├── setup.sh                 # Installation automatique (macOS)
 ├── requirements.txt         # Dépendances Python
-├── design_proposals/        # Maquettes HTML des 4 thèmes
 └── static/
     ├── index.html           # Interface web
     ├── style.css            # Styles (4 thèmes CSS)
-    └── app.js               # WebSocket + audio + VAD + TTS + thèmes
+    └── app.js               # WebSocket + audio + VAD + TTS + salles + thèmes
 ```
+
+---
 
 ## 🗺️ Roadmap
 
-- [x] POC — conversation FR ↔ EN sur réseau local (validé le 14/04/2026)
-- [x] Synthèse vocale (TTS) — lecture automatique des traductions
+- [x] POC — conversation FR ↔ EN sur réseau local
+- [x] Synthèse vocale (TTS)
 - [x] Mode VAD — détection automatique de la voix
-- [x] Script de lancement unique (`./start_all.sh`)
-- [x] Connexion internet via Ngrok (`./start_ngrok.sh`)
 - [x] Interface dynamique — prénom + langue au choix
-- [x] 8 langues : 🇫🇷 🇬🇧 🇨🇳 🇸🇦 🇷🇺 🇪🇸 🇮🇹 🇵🇹
-- [x] Whisper small+medium — optimisation latence/qualité selon la langue
-- [x] 4 thèmes visuels sélectionnables
+- [x] 8 langues supportées
+- [x] 4 thèmes visuels
+- [x] Optimisation latence — Whisper small/medium selon la langue, beam_size=1
 - [x] Hébergement permanent — Oracle Cloud + HTTPS (whisperbridge.duckdns.org)
+- [x] Salles privées — chaque conversation a son URL unique
 - [ ] Application mobile native (iOS / Android) — mode hors-ligne
+
+---
 
 ## 📄 Licence
 
