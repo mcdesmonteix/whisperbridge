@@ -22,7 +22,7 @@ LANGS_MEDIUM = {"zh", "ar", "ru"}
 
 # ── Limites de sécurité ──
 MAX_AUDIO_BYTES    = 10 * 1024 * 1024  # 10 Mo max par message audio
-MAX_PARTICIPANTS   = 2                  # 2 personnes max par salle
+MAX_PARTICIPANTS   = 5                  # 5 personnes max par salle
 RATE_LIMIT_SECONDS = 3.0               # 1 audio toutes les 3s par session
 INACTIVITY_TIMEOUT = 30 * 60           # 30 min sans message → déconnexion
 
