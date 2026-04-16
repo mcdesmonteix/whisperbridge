@@ -65,6 +65,41 @@ function shareRoom() {
   }
 }
 
+function addSharePrompt() {
+  const url = location.href;
+  const div = document.createElement("div");
+  div.className = "msg-share-prompt";
+
+  const title = document.createElement("div");
+  title.className = "msg-share-title";
+  title.textContent = "🔗 Nouvelle conversation créée !";
+
+  const subtitle = document.createElement("div");
+  subtitle.className = "msg-share-subtitle";
+  subtitle.textContent = "Envoie ce lien à ton interlocuteur pour qu'il te rejoigne :";
+
+  const urlBox = document.createElement("div");
+  urlBox.className = "msg-share-url";
+  urlBox.textContent = url;
+
+  const btn = document.createElement("button");
+  btn.className = "msg-share-btn";
+  btn.textContent = "Copier le lien";
+  btn.onclick = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(() => { btn.textContent = "✓ Copié !"; setTimeout(() => { btn.textContent = "Copier le lien"; }, 2000); });
+    } else {
+      prompt("Copie ce lien :", url);
+    }
+  };
+
+  div.appendChild(title);
+  div.appendChild(subtitle);
+  div.appendChild(urlBox);
+  div.appendChild(btn);
+  appendToMessages(div);
+}
+
 initRoomUI();
 
 // ── État ──
@@ -75,6 +110,7 @@ let userLang   = null;
 let ws         = null;
 let mediaRecorder = null;
 let audioChunks   = [];
+let translationPaused = false;
 
 // Utilisateurs en ligne : { sessionId: { name, lang } }
 let onlineUsers = {};
@@ -113,6 +149,7 @@ function connectUser() {
   sessionId = Math.random().toString(36).substr(2, 9);
 
   // Récupère ou génère l'ID de salle
+  const isNewRoom = !getRoomId();
   roomId = getRoomId();
   if (!roomId) {
     roomId = Math.random().toString(36).substr(2, 6);
@@ -124,6 +161,7 @@ function connectUser() {
 
   updateTTSButton();
   updateVADButton();
+  updatePauseButton();
 
   const protocol = location.protocol === "https:" ? "wss:" : "ws:";
   ws = new WebSocket(`${protocol}//${location.host}/ws/${roomId}/${sessionId}`);
@@ -132,6 +170,7 @@ function connectUser() {
     ws.send(JSON.stringify({ type: "join", name: userName, lang: userLang }));
     addSystemMessage("Connexion établie ✓");
     requestMicPermission();
+    if (isNewRoom) addSharePrompt();
   };
 
   ws.onclose = () => addSystemMessage("Déconnecté du serveur.");
@@ -360,6 +399,7 @@ function getVolume() {
 
 function detectVoice() {
   if (!vadDetecting) return;
+  if (translationPaused) { requestAnimationFrame(detectVoice); return; }
   if (getVolume() > VAD_THRESHOLD) {
     clearTimeout(vadSilenceTimer);
     if (!vadSpeaking) { vadSpeaking = true; startVADRecording(); }
@@ -393,10 +433,35 @@ function updateVADButton() {
   btn.classList.toggle("active", vadActive);
 }
 
+// ── Pause ──
+
+function togglePause() {
+  translationPaused = !translationPaused;
+  if (translationPaused) {
+    // Stoppe l'enregistrement en cours si VAD actif
+    if (vadSpeaking) { vadSpeaking = false; stopVADRecording(); }
+    addSystemMessage("⏸️ Traduction en pause");
+  } else {
+    addSystemMessage("▶️ Traduction reprise");
+  }
+  updatePauseButton();
+}
+
+function updatePauseButton() {
+  const btn = document.getElementById("btn-pause");
+  const indicator = document.getElementById("pause-indicator");
+  if (!btn) return;
+  btn.classList.toggle("active", translationPaused);
+  btn.textContent = translationPaused ? "▶️" : "⏸️";
+  btn.title = translationPaused ? "Reprendre la traduction" : "Mettre en pause la traduction";
+  indicator?.classList.toggle("hidden", !translationPaused);
+}
+
 // ── Envoi audio ──
 
 function sendAudio() {
   if (!audioChunks.length) return;
+  if (translationPaused) { audioChunks = []; return; }
   if (!ws || ws.readyState !== WebSocket.OPEN) {
     addSystemMessage("⚠️ Non connecté au serveur."); return;
   }

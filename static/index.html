@@ -82,6 +82,7 @@
     <footer>
       <div id="recording-indicator" class="hidden">🎙️ Enregistrement…</div>
       <div id="vad-listening" class="hidden">👂 En écoute…</div>
+      <div id="pause-indicator" class="hidden">⏸️ Traduction en pause</div>
       <div class="footer-controls">
         <button id="btn-vad" onclick="toggleVAD()" title="Détection automatique de la voix">🤖</button>
         <button id="btn-mic"
@@ -90,8 +91,9 @@
           ontouchstart="startRecording()"
           ontouchend="stopRecording()">🎤</button>
         <button id="btn-tts" onclick="toggleTTS()" title="Lecture vocale">🔊</button>
+        <button id="btn-pause" onclick="togglePause()" title="Mettre en pause la traduction">⏸️</button>
       </div>
-      <div class="footer-hint">🤖 Auto · 🎤 Maintenir pour parler · 🔊 Lecture vocale</div>
+      <div class="footer-hint">🤖 Auto · 🎤 Maintenir pour parler · 🔊 Lecture vocale · ⏸️ Pause</div>
       <div class="footer-hint" style="margin-top:4px">
         <button id="btn-share" onclick="shareRoom()" title="Partager le lien de cette conversation">🔗 Partager le lien</button>
       </div>
