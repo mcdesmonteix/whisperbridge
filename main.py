@@ -36,8 +36,20 @@ def _transcribe_sync(audio_bytes: bytes, lang: str) -> str:
         f.write(audio_bytes)
         tmp_path = f.name
     try:
-        segments, info = whisper.transcribe(tmp_path, language=lang, beam_size=1)
-        text = " ".join(seg.text.strip() for seg in segments)
+        segments, info = whisper.transcribe(
+            tmp_path,
+            language=lang,
+            beam_size=1,
+            no_speech_threshold=0.6,
+            condition_on_previous_text=False,
+            vad_filter=True,
+            vad_parameters={"min_silence_duration_ms": 300},
+        )
+        text = " ".join(
+            seg.text.strip()
+            for seg in segments
+            if seg.no_speech_prob < 0.6
+        )
         print(f"  Transcription ({info.language}, {'medium' if lang in LANGS_MEDIUM else 'small'}) : {text}")
         return text
     finally:
