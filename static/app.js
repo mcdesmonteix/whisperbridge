@@ -152,7 +152,10 @@ function connectUser() {
   const isNewRoom = !getRoomId();
   roomId = getRoomId();
   if (!roomId) {
-    roomId = Math.random().toString(36).substr(2, 6);
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    const array = new Uint8Array(12);
+    crypto.getRandomValues(array);
+    roomId = Array.from(array).map(b => chars[b % chars.length]).join('');
     history.replaceState(null, '', `/room/${roomId}`);
   }
 
