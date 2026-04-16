@@ -161,6 +161,7 @@
     <h2>Auto-hébergement</h2>
     <p class="install-sub">WhisperBridge est open source. Hébergez votre propre instance en quelques minutes.</p>
     <div class="code-block">
+      <button class="code-copy-btn" onclick="copyCode(this)">Copier</button>
       <pre><code>git clone https://github.com/mcdesmonteix/whisperbridge.git
 cd whisperbridge
 ./setup.sh</code></pre>
@@ -179,6 +180,16 @@ cd whisperbridge
   </footer>
 
   <script>
+    // Copier bloc de code
+    function copyCode(btn) {
+      const code = btn.closest('.code-block').querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = '✓ Copié !';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
     // Mode clair / sombre
     const toggle = document.getElementById('themeToggle');
     const html   = document.documentElement;
