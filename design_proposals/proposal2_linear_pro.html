@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhisperBridge — Proposal 2: Linear Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --surface2: #f0f0f2;
+      --border: #e4e4e8;
+      --border-strong: #d0d0d8;
+      --text: #111118;
+      --text-muted: #6b6b80;
+      --text-dim: #9b9baa;
+      --accent: #4f46e5;
+      --accent-light: rgba(79,70,229,0.08);
+      --accent-mid: rgba(79,70,229,0.15);
+      --me-bubble: #4f46e5;
+      --other-bubble: #ffffff;
+      --online: #22c55e;
+      --scrollbar: #e0e0e8;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ══════════════════════════════
+       LOGIN SCREEN
+    ══════════════════════════════ */
+    #screen-select {
+      display: flex; align-items: center; justify-content: center;
+      height: 100dvh;
+      position: relative;
+    }
+    #screen-select::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(600px 400px at 20% 80%, rgba(79,70,229,0.04) 0%, transparent 100%),
+        radial-gradient(400px 300px at 80% 20%, rgba(139,92,246,0.04) 0%, transparent 100%);
+    }
+
+    .select-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px 40px;
+      width: 380px;
+      box-shadow: var(--shadow-md);
+      position: relative; z-index: 1;
+    }
+
+    .logo-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 28px; gap: 10px;
+    }
+    .logo-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 16px rgba(79,70,229,0.3);
+    }
+    .app-title {
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text); letter-spacing: -0.4px;
+    }
+    .app-subtitle {
+      font-size: 0.83rem; color: var(--text-muted);
+      text-align: center; line-height: 1.5;
+    }
+
+    .label {
+      font-size: 0.78rem; font-weight: 600;
+      color: var(--text-muted); margin-bottom: 7px;
+      display: block;
+    }
+    .form-group { margin-bottom: 14px; }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.92rem;
+      color: var(--text);
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-group input::placeholder { color: var(--text-dim); }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+    }
+
+    .btn-join {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 6px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+      box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+    }
+    .btn-join:hover { background: #4338ca; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(79,70,229,0.35); }
+
+    .help-text {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      text-align: center;
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════
+       CHAT SCREEN
+    ══════════════════════════════ */
+    #screen-chat {
+      display: flex; flex-direction: column;
+      height: 100dvh;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .header-logo {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+    .header-title { font-weight: 700; font-size: 0.92rem; color: var(--text); }
+    .header-sep { color: var(--border-strong); font-size: 0.9rem; }
+    .header-room {
+      font-size: 0.72rem; color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 6px; }
+    .user-pill {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.73rem; font-weight: 600;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .user-pill.me {
+      background: var(--accent-light);
+      border-color: rgba(79,70,229,0.2);
+      color: var(--accent);
+    }
+    .user-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--online); }
+
+    .btn-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { background: var(--border); color: var(--text); }
+
+    /* Messages */
+    #messages {
+      flex: 1; overflow-y: auto;
+      padding: 20px 20px 10px;
+      display: flex; flex-direction: column; gap: 10px;
+      background: var(--bg);
+    }
+    #messages::-webkit-scrollbar { width: 4px; }
+    #messages::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 4px; }
+
+    .msg-system {
+      text-align: center; font-size: 0.68rem;
+      color: var(--text-dim); padding: 2px 0;
+    }
+
+    .message { max-width: 70%; display: flex; flex-direction: column; gap: 3px; }
+    .message.me { align-self: flex-end; align-items: flex-end; }
+    .message.other { align-self: flex-start; align-items: flex-start; }
+
+    .message-sender { font-size: 0.67rem; color: var(--text-dim); padding: 0 6px; font-weight: 500; }
+
+    .message-bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.9rem; line-height: 1.5;
+    }
+    .message.me .message-bubble {
+      background: var(--me-bubble); color: #fff;
+      border-bottom-right-radius: 5px;
+    }
+    .message.other .message-bubble {
+      background: var(--other-bubble); color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 5px;
+      box-shadow: var(--shadow);
+    }
+
+    .message-translation { font-size: 0.71rem; color: var(--text-dim); font-style: italic; padding: 0 6px; }
+    .message-meta { font-size: 0.63rem; color: var(--text-dim); padding: 0 6px; }
+
+    .msg-share-prompt {
+      background: var(--accent-light);
+      border: 1.5px solid rgba(79,70,229,0.2);
+      border-radius: 14px; padding: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      align-self: center; max-width: 88%; text-align: center;
+    }
+    .msg-share-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    .msg-share-subtitle { font-size: 0.77rem; color: var(--text-muted); }
+    .msg-share-url {
+      font-size: 0.72rem; font-family: monospace;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 7px; padding: 7px 10px;
+      word-break: break-all; color: var(--text-muted);
+    }
+    .msg-share-btn {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 8px; padding: 9px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      font-family: 'Inter', sans-serif; transition: opacity 0.15s;
+    }
+    .msg-share-btn:hover { opacity: 0.9; }
+
+    /* Footer */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 14px 24px 24px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .status-indicator {
+      font-size: 0.77rem; font-weight: 600;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-indicator .dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-indicator.recording { color: #ef4444; }
+    .status-indicator.recording .dot { background: #ef4444; animation: blink 0.8s infinite; }
+    .status-indicator.listening { color: #22c55e; }
+    .status-indicator.listening .dot { background: #22c55e; animation: blink 2s infinite; }
+    .status-indicator.paused { color: #f59e0b; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .footer-controls { display: flex; align-items: center; gap: 12px; }
+
+    #btn-mic {
+      width: 64px; height: 64px;
+      border-radius: 50%; border: none;
+      background: var(--accent);
+      font-size: 1.55rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 4px 16px rgba(79,70,229,0.35);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #btn-mic:active, #btn-mic.recording {
+      background: #ef4444 !important;
+      box-shadow: 0 4px 16px rgba(239,68,68,0.4) !important;
+      transform: scale(0.95);
+    }
+
+    .btn-sm {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-sm:hover { background: var(--border); color: var(--text); }
+    .btn-sm.active {
+      background: rgba(34,197,94,0.08);
+      border-color: rgba(34,197,94,0.35);
+      color: #16a34a;
+    }
+    .btn-sm.active.pause {
+      background: rgba(245,158,11,0.08);
+      border-color: rgba(245,158,11,0.35);
+      color: #d97706;
+    }
+    .btn-sm.muted { opacity: 0.35; }
+
+    .footer-hint { font-size: 0.67rem; color: var(--text-dim); }
+
+    #btn-share {
+      font-size: 0.72rem; color: var(--text-muted);
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 14px;
+      cursor: pointer; font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+    #btn-share:hover { color: var(--accent); border-color: rgba(79,70,229,0.3); }
+  </style>
+</head>
+<body>
+  <!-- LOGIN SCREEN -->
+  <div id="screen-select">
+    <div class="select-card">
+      <div class="logo-wrap">
+        <div class="logo-icon">🌉</div>
+        <div class="app-title">WhisperBridge</div>
+        <div class="app-subtitle" id="room-label">Nouvelle conversation ou rejoins un lien partagé</div>
+      </div>
+
+      <div class="form-group">
+        <label class="label" for="input-name">Prénom</label>
+        <input id="input-name" type="text" placeholder="Ton prénom" maxlength="20" autocomplete="off"
+          onkeydown="if(event.key==='Enter') connectUser()" />
+      </div>
+
+      <div class="form-group">
+        <label class="label" for="select-lang">Langue parlée</label>
+        <select id="select-lang">
+          <option value="fr">🇫🇷 Français</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="zh">🇨🇳 中文 (Mandarin)</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="it">🇮🇹 Italiano</option>
+          <option value="pt">🇵🇹 Português</option>
+        </select>
+      </div>
+
+      <button class="btn-join" onclick="connectUser()" id="btn-join">Rejoindre →</button>
+
+      <div class="help-text">Traduction vocale instantanée · Whisper AI + LibreTranslate<br>Jusqu'à 5 participants par salle</div>
+    </div>
+  </div>
+
+  <!-- CHAT SCREEN -->
+  <div id="screen-chat" class="hidden">
+    <header>
+      <div class="header-left">
+        <div class="header-logo">🌉</div>
+        <div class="header-title">WhisperBridge</div>
+        <span class="header-sep">/</span>
+        <div class="header-room" id="header-room-id"></div>
+      </div>
+      <div class="header-right">
+        <div id="header-users"></div>
+        <button class="btn-icon" onclick="shareRoom()">🔗</button>
+      </div>
+    </header>
+
+    <div id="messages"></div>
+
+    <footer>
+      <div class="hidden status-indicator recording" id="recording-indicator">
+        <div class="dot"></div> Enregistrement…
+      </div>
+      <div class="hidden status-indicator listening" id="vad-listening">
+        <div class="dot"></div> En écoute…
+      </div>
+      <div class="hidden status-indicator paused" id="pause-indicator">⏸ Traduction en pause</div>
+
+      <div class="footer-controls">
+        <button class="btn-sm" id="btn-vad" onclick="toggleVAD()" title="Mode auto">🤖</button>
+        <button id="btn-mic" onmousedown="startRecording()" onmouseup="stopRecording()"
+          ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
+        <button class="btn-sm active" id="btn-tts" onclick="toggleTTS()" title="Lecture vocale">🔊</button>
+        <button class="btn-sm" id="btn-pause" onclick="togglePause()" title="Pause">⏸️</button>
+      </div>
+
+      <div class="footer-hint">🤖 Auto · 🎤 Maintenir pour parler · 🔊 TTS · ⏸ Pause</div>
+      <div><button id="btn-share" onclick="shareRoom()">🔗 Partager le lien</button></div>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

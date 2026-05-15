@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhisperBridge — Proposal 3: Neon Wave</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0c14;
+      --surface: rgba(255,255,255,0.03);
+      --surface2: rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.07);
+      --text: #f5f0ff;
+      --text-muted: rgba(200,180,255,0.6);
+      --text-dim: rgba(200,180,255,0.3);
+      --coral: #ff6b6b;
+      --pink: #ff4da6;
+      --violet: #9b59ff;
+      --gradient: linear-gradient(135deg, #ff6b6b, #ff4da6, #9b59ff);
+      --gradient-soft: linear-gradient(135deg, rgba(255,107,107,0.8), rgba(155,89,255,0.8));
+      --me-bubble: linear-gradient(135deg, #ff4da6, #9b59ff);
+      --other-bubble: rgba(255,255,255,0.05);
+      --online: #00ffb3;
+      --scrollbar: rgba(155,89,255,0.2);
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100dvh;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── ANIMATED WAVE BG ── */
+    .wave-bg {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 280px; z-index: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .wave {
+      position: absolute; bottom: 0;
+      width: 200%; height: 100%;
+      background: linear-gradient(0deg, rgba(155,89,255,0.06) 0%, transparent 100%);
+    }
+    .wave::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 120px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='rgba(155,89,255,0.08)' d='M0,60L48,50C96,40,192,20,288,26.7C384,33,480,67,576,73.3C672,80,768,60,864,46.7C960,33,1056,27,1152,33.3C1248,40,1344,60,1392,70L1440,80L1440,120L0,120Z'/%3E%3C/svg%3E") repeat-x bottom;
+      animation: wave-move 8s linear infinite;
+    }
+    .wave::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 80px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='rgba(255,77,166,0.06)' d='M0,40L60,45C120,50,240,60,360,58.7C480,57,600,43,720,37.3C840,31,960,33,1080,38.7C1200,44,1320,54,1380,58.7L1440,63L1440,80L0,80Z'/%3E%3C/svg%3E") repeat-x bottom;
+      animation: wave-move 12s linear infinite reverse;
+    }
+    @keyframes wave-move { from{background-position-x:0} to{background-position-x:1440px} }
+
+    /* Ambient glow spots */
+    .glow-spot {
+      position: fixed; border-radius: 50%;
+      filter: blur(100px); opacity: 0.12;
+      pointer-events: none; z-index: 0;
+    }
+    .glow-spot.g1 { width: 500px; height: 500px; background: var(--violet); top: -200px; right: -100px; }
+    .glow-spot.g2 { width: 400px; height: 400px; background: var(--pink); bottom: -150px; left: -100px; }
+
+    .hidden { display: none !important; }
+
+    /* ══════════════════════════════
+       LOGIN SCREEN
+    ══════════════════════════════ */
+    #screen-select {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      height: 100dvh;
+    }
+
+    .select-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(155,89,255,0.2);
+      border-radius: 28px;
+      padding: 52px 44px 44px;
+      width: 380px;
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      box-shadow:
+        0 0 0 1px rgba(255,77,166,0.05),
+        0 32px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      text-align: center;
+    }
+
+    .logo-wrap { margin-bottom: 32px; }
+    .logo-icon {
+      width: 72px; height: 72px;
+      border-radius: 22px;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+      box-shadow: 0 0 40px rgba(155,89,255,0.5), 0 8px 24px rgba(0,0,0,0.4);
+      position: relative;
+    }
+    .logo-icon::before {
+      content: '';
+      position: absolute; inset: -3px;
+      border-radius: 24px;
+      background: var(--gradient);
+      z-index: -1;
+      filter: blur(12px);
+      opacity: 0.6;
+    }
+    .app-title {
+      font-size: 2rem; font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+    .app-subtitle {
+      font-size: 0.83rem; color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .form-group { margin-bottom: 14px; text-align: left; }
+    .label {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 7px; display: block;
+      text-transform: uppercase; letter-spacing: 0.07em;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      font-size: 0.93rem;
+      color: var(--text);
+      outline: none;
+      font-family: 'Outfit', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-group input::placeholder { color: var(--text-dim); }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: rgba(155,89,255,0.5);
+      box-shadow: 0 0 0 3px rgba(155,89,255,0.08), 0 0 16px rgba(155,89,255,0.12);
+    }
+    .form-group select option { background: #16141f; }
+
+    .btn-join {
+      width: 100%;
+      padding: 15px;
+      background: var(--gradient);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.03em;
+      box-shadow: 0 6px 24px rgba(155,89,255,0.4), 0 2px 8px rgba(255,77,166,0.3);
+      transition: all 0.15s;
+      position: relative; overflow: hidden;
+    }
+    .btn-join::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+    }
+    .btn-join:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(155,89,255,0.5); }
+
+    .pill-hint {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 22px;
+      background: rgba(155,89,255,0.08);
+      border: 1px solid rgba(155,89,255,0.15);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 0.7rem; color: rgba(200,180,255,0.7);
+    }
+
+    /* ══════════════════════════════
+       CHAT SCREEN
+    ══════════════════════════════ */
+    #screen-chat {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column;
+      height: 100dvh;
+    }
+
+    header {
+      background: rgba(12,12,20,0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid rgba(155,89,255,0.15);
+      padding: 0 20px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .header-left { display: flex; align-items: center; gap: 12px; }
+    .header-logo {
+      width: 30px; height: 30px;
+      border-radius: 9px;
+      background: var(--gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 0 12px rgba(155,89,255,0.4);
+    }
+    .header-title { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .header-room {
+      font-size: 0.7rem; color: var(--text-muted);
+      background: rgba(155,89,255,0.08);
+      border: 1px solid rgba(155,89,255,0.15);
+      border-radius: 6px; padding: 2px 8px;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .user-pill {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px; font-size: 0.73rem; font-weight: 600;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-muted);
+    }
+    .user-pill.me {
+      background: rgba(155,89,255,0.1);
+      border-color: rgba(155,89,255,0.25);
+      color: #c4a7ff;
+    }
+    .user-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--online);
+      box-shadow: 0 0 6px var(--online);
+    }
+
+    .btn-icon {
+      width: 32px; height: 32px; border-radius: 9px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 0.82rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { border-color: rgba(155,89,255,0.3); color: #c4a7ff; }
+
+    /* Messages */
+    #messages {
+      flex: 1; overflow-y: auto;
+      padding: 20px 20px 10px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    #messages::-webkit-scrollbar { width: 3px; }
+    #messages::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+
+    .msg-system {
+      text-align: center; font-size: 0.68rem; color: var(--text-dim);
+    }
+    .msg-system span {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px; padding: 3px 12px;
+      display: inline-block;
+    }
+
+    .message { max-width: 72%; display: flex; flex-direction: column; gap: 4px; }
+    .message.me { align-self: flex-end; align-items: flex-end; }
+    .message.other { align-self: flex-start; align-items: flex-start; }
+
+    .message-sender { font-size: 0.68rem; color: var(--text-muted); padding: 0 6px; font-weight: 500; }
+
+    .message-bubble {
+      padding: 11px 16px;
+      border-radius: 18px;
+      font-size: 0.9rem; line-height: 1.55;
+    }
+    .message.me .message-bubble {
+      background: var(--me-bubble); color: #fff;
+      border-bottom-right-radius: 5px;
+      box-shadow: 0 4px 20px rgba(155,89,255,0.3);
+    }
+    .message.other .message-bubble {
+      background: var(--other-bubble); color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 5px;
+    }
+
+    .message-translation { font-size: 0.72rem; color: rgba(200,180,255,0.5); font-style: italic; padding: 0 6px; }
+    .message-meta { font-size: 0.63rem; color: var(--text-dim); padding: 0 6px; }
+
+    .msg-share-prompt {
+      background: rgba(155,89,255,0.06);
+      border: 1px solid rgba(155,89,255,0.2);
+      border-radius: 16px; padding: 16px;
+      display: flex; flex-direction: column; gap: 8px;
+      align-self: center; max-width: 88%; text-align: center;
+    }
+    .msg-share-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+    .msg-share-subtitle { font-size: 0.77rem; color: var(--text-muted); }
+    .msg-share-url {
+      font-size: 0.72rem; font-family: monospace;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 10px;
+      word-break: break-all; color: var(--text-muted);
+    }
+    .msg-share-btn {
+      background: var(--gradient); color: #fff;
+      border: none; border-radius: 10px; padding: 9px;
+      font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      font-family: 'Outfit', sans-serif; transition: opacity 0.15s;
+    }
+    .msg-share-btn:hover { opacity: 0.85; }
+
+    /* Footer */
+    footer {
+      background: rgba(12,12,20,0.8);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(155,89,255,0.12);
+      padding: 14px 24px 28px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .status-indicator {
+      font-size: 0.78rem; font-weight: 600;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .status-indicator .dot { width: 7px; height: 7px; border-radius: 50%; }
+    .status-indicator.recording { color: #ff6b6b; }
+    .status-indicator.recording .dot {
+      background: #ff6b6b;
+      box-shadow: 0 0 8px #ff6b6b;
+      animation: blink 0.8s infinite;
+    }
+    .status-indicator.listening { color: var(--online); }
+    .status-indicator.listening .dot {
+      background: var(--online);
+      box-shadow: 0 0 8px var(--online);
+      animation: blink 2s infinite;
+    }
+    .status-indicator.paused { color: #ffb347; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .footer-controls { display: flex; align-items: center; gap: 16px; }
+
+    #btn-mic {
+      width: 72px; height: 72px;
+      border-radius: 50%; border: none;
+      background: var(--gradient);
+      font-size: 1.7rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      box-shadow: 0 0 30px rgba(155,89,255,0.4), 0 6px 24px rgba(0,0,0,0.3);
+    }
+    /* Glow ring */
+    #btn-mic::before {
+      content: ''; position: absolute;
+      inset: -6px; border-radius: 50%;
+      border: 2px solid rgba(155,89,255,0.3);
+      animation: ring-expand 2.5s ease-in-out infinite;
+    }
+    #btn-mic::after {
+      content: ''; position: absolute;
+      inset: -12px; border-radius: 50%;
+      border: 1.5px solid rgba(155,89,255,0.12);
+      animation: ring-expand 2.5s 0.8s ease-in-out infinite;
+    }
+    @keyframes ring-expand {
+      0%,100%{opacity:0.5;transform:scale(1)} 50%{opacity:0.1;transform:scale(1.1)}
+    }
+    #btn-mic:active, #btn-mic.recording {
+      background: linear-gradient(135deg,#ef4444,#ff6b6b) !important;
+      box-shadow: 0 0 30px rgba(239,68,68,0.5) !important;
+      transform: scale(0.94);
+    }
+
+    .btn-sm {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted); font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .btn-sm:hover { border-color: rgba(155,89,255,0.3); color: #c4a7ff; }
+    .btn-sm.active {
+      background: rgba(0,255,179,0.08);
+      border-color: rgba(0,255,179,0.3);
+      color: var(--online);
+      box-shadow: 0 0 12px rgba(0,255,179,0.15);
+    }
+    .btn-sm.active.pause {
+      background: rgba(255,179,71,0.08);
+      border-color: rgba(255,179,71,0.3);
+      color: #ffb347;
+    }
+    .btn-sm.muted { opacity: 0.3; }
+
+    .footer-hint { font-size: 0.67rem; color: var(--text-dim); }
+
+    #btn-share {
+      font-size: 0.72rem; color: var(--text-muted);
+      background: rgba(155,89,255,0.06);
+      border: 1px solid rgba(155,89,255,0.15);
+      border-radius: 20px; padding: 5px 14px;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+      transition: all 0.15s;
+    }
+    #btn-share:hover { color: #c4a7ff; border-color: rgba(155,89,255,0.35); }
+  </style>
+</head>
+<body>
+  <div class="glow-spot g1"></div>
+  <div class="glow-spot g2"></div>
+  <div class="wave-bg"><div class="wave"></div></div>
+
+  <!-- LOGIN SCREEN -->
+  <div id="screen-select">
+    <div class="select-card">
+      <div class="logo-wrap">
+        <div class="logo-icon">🌉</div>
+        <div class="app-title">WhisperBridge</div>
+        <div class="app-subtitle" id="room-label">Traduction vocale instantanée</div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">Prénom</div>
+        <input id="input-name" type="text" placeholder="Ton prénom" maxlength="20" autocomplete="off"
+          onkeydown="if(event.key==='Enter') connectUser()" />
+      </div>
+
+      <div class="form-group">
+        <div class="label">Langue</div>
+        <select id="select-lang">
+          <option value="fr">🇫🇷 Français</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="zh">🇨🇳 中文 (Mandarin)</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="it">🇮🇹 Italiano</option>
+          <option value="pt">🇵🇹 Português</option>
+        </select>
+      </div>
+
+      <button class="btn-join" onclick="connectUser()" id="btn-join">Rejoindre →</button>
+
+      <div class="pill-hint">✦ Whisper AI · LibreTranslate · 8 langues</div>
+    </div>
+  </div>
+
+  <!-- CHAT SCREEN -->
+  <div id="screen-chat" class="hidden">
+    <header>
+      <div class="header-left">
+        <div class="header-logo">🌉</div>
+        <div class="header-title">WhisperBridge</div>
+        <div class="header-room" id="header-room-id"></div>
+      </div>
+      <div class="header-right">
+        <div id="header-users"></div>
+        <button class="btn-icon" onclick="shareRoom()">🔗</button>
+      </div>
+    </header>
+
+    <div id="messages"></div>
+
+    <footer>
+      <div class="hidden status-indicator recording" id="recording-indicator">
+        <div class="dot"></div> Enregistrement…
+      </div>
+      <div class="hidden status-indicator listening" id="vad-listening">
+        <div class="dot"></div> En écoute…
+      </div>
+      <div class="hidden status-indicator paused" id="pause-indicator">⏸ Traduction en pause</div>
+
+      <div class="footer-controls">
+        <button class="btn-sm" id="btn-vad" onclick="toggleVAD()" title="Mode auto">🤖</button>
+        <button id="btn-mic" onmousedown="startRecording()" onmouseup="stopRecording()"
+          ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
+        <button class="btn-sm active" id="btn-tts" onclick="toggleTTS()" title="Lecture vocale">🔊</button>
+        <button class="btn-sm" id="btn-pause" onclick="togglePause()" title="Pause">⏸️</button>
+      </div>
+
+      <div class="footer-hint">🤖 Auto · 🎤 Maintenir · 🔊 TTS · ⏸ Pause</div>
+      <div><button id="btn-share" onclick="shareRoom()">🔗 Partager le lien</button></div>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
