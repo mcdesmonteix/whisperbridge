@@ -111,6 +111,20 @@ async def room_page(room_id: str):
     return FileResponse("static/index.html", headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 
+# ── Temporary design proposal preview routes ──
+@app.get("/proposal/1")
+async def proposal1():
+    return FileResponse("static/proposal1.html", headers={"Cache-Control": "no-cache"})
+
+@app.get("/proposal/2")
+async def proposal2():
+    return FileResponse("static/proposal2.html", headers={"Cache-Control": "no-cache"})
+
+@app.get("/proposal/3")
+async def proposal3():
+    return FileResponse("static/proposal3.html", headers={"Cache-Control": "no-cache"})
+
+
 @app.websocket("/ws/{room_id}/{session_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str, session_id: str):
     await websocket.accept()

@@ -4,75 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WhisperBridge</title>
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_32x32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon_32x32.png?v=3" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=2" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=3" />
 </head>
 <body>
 
-  <!-- Fond dégradé thème Glass -->
-  <div id="glass-bg">
-    <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
-    <div class="blob blob3"></div>
-  </div>
+  <!-- Backgrounds (Toggled via CSS data-theme) -->
+  <div class="aurora-bg"><div class="aurora-spot"></div></div>
+  <div class="glow-spot g1"></div>
+  <div class="glow-spot g2"></div>
+  <div class="wave-bg"><div class="wave"></div></div>
 
-  <!-- ── Écran de connexion ── -->
+  <!-- LOGIN SCREEN -->
   <div id="screen-select">
     <div class="select-card">
-      <div class="app-logo"><img src="/static/logo.png?v=2" alt="WhisperBridge" /></div>
-      <h1>WhisperBridge</h1>
-      <p id="room-label">Entre ton prénom et ta langue</p>
+      <div class="logo-wrap">
+        <div class="logo-icon">🌉</div>
+        <div class="app-title">WhisperBridge</div>
+        <div class="app-subtitle" id="room-label">Traduction vocale instantanée</div>
+      </div>
 
       <div class="form-group">
+        <label class="label" for="input-name">Prénom</label>
         <input id="input-name" type="text" placeholder="Ton prénom" maxlength="20" autocomplete="off"
           onkeydown="if(event.key==='Enter') connectUser()" />
       </div>
 
       <div class="form-group">
+        <label class="label" for="select-lang">Langue parlée</label>
         <select id="select-lang">
           <option value="fr">🇫🇷 Français</option>
           <option value="en">🇬🇧 English</option>
           <option value="zh">🇨🇳 中文 (Mandarin)</option>
-          <option value="ar">🇸🇦 العربية (Arabe)</option>
-          <option value="ru">🇷🇺 Русский (Russe)</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="ru">🇷🇺 Русский</option>
           <option value="es">🇪🇸 Español</option>
           <option value="it">🇮🇹 Italiano</option>
           <option value="pt">🇵🇹 Português</option>
         </select>
       </div>
 
-      <button class="btn-join" onclick="connectUser()" id="btn-join">Rejoindre →</button>
+      <button class="btn-join" onclick="connectUser()" id="btn-join">Rejoindre la conversation →</button>
 
-      <div class="theme-picker-label">Choisir un thème</div>
+      <div class="theme-picker-label">Apparence</div>
       <div class="theme-picker">
-        <div class="theme-swatch" data-theme="glass"   data-label="Glass"    onclick="setTheme('glass')"   title="Glassmorphism"></div>
-        <div class="theme-swatch" data-theme="dark"    data-label="Dark"     onclick="setTheme('dark')"    title="Dark mode"></div>
-        <div class="theme-swatch" data-theme="minimal" data-label="Minimal"  onclick="setTheme('minimal')" title="Minimaliste"></div>
-        <div class="theme-swatch" data-theme="vivid"   data-label="Vivid"    onclick="setTheme('vivid')"   title="Coloré"></div>
+        <div class="theme-swatch" data-theme="aurora" data-label="Aurora" onclick="setTheme('aurora')" title="Aurora Dark"></div>
+        <div class="theme-swatch" data-theme="linear" data-label="Linear" onclick="setTheme('linear')" title="Linear Pro"></div>
+        <div class="theme-swatch" data-theme="neon"   data-label="Neon"   onclick="setTheme('neon')"   title="Neon Wave"></div>
       </div>
+
+      <div class="help-text pill-hint">✦ Whisper AI · LibreTranslate · 8 langues</div>
     </div>
   </div>
 
-  <!-- ── Écran de conversation ── -->
+  <!-- CHAT SCREEN -->
   <div id="screen-chat" class="hidden">
     <header>
       <div class="header-left">
-        <div class="header-logo-box"><img src="/static/logo.png?v=2" alt="WhisperBridge" /></div>
+        <div class="header-logo">🌉</div>
         <div class="header-title">WhisperBridge</div>
+        <span class="header-sep">/</span>
+        <div class="header-room" id="header-room-id"></div>
       </div>
       <div class="header-right">
-        <div id="header-users" class="header-users"></div>
-        <div style="position:relative;">
-          <button id="btn-theme" onclick="toggleThemeDropdown()" title="Changer de thème">🎨</button>
+        <div id="header-users"></div>
+        <div style="position:relative; display:flex; align-items:center; gap:8px;">
+          <button class="btn-icon" id="btn-theme" onclick="toggleThemeDropdown()" title="Changer de thème">🎨</button>
           <div class="theme-dropdown hidden" id="theme-dropdown">
-            <div class="theme-swatch" data-theme="glass"   onclick="setTheme('glass');closeThemeDropdown()"   title="Glass"></div>
-            <div class="theme-swatch" data-theme="dark"    onclick="setTheme('dark');closeThemeDropdown()"    title="Dark"></div>
-            <div class="theme-swatch" data-theme="minimal" onclick="setTheme('minimal');closeThemeDropdown()" title="Minimal"></div>
-            <div class="theme-swatch" data-theme="vivid"   onclick="setTheme('vivid');closeThemeDropdown()"   title="Vivid"></div>
+            <div class="theme-swatch" data-theme="aurora" onclick="setTheme('aurora');closeThemeDropdown()" title="Aurora"></div>
+            <div class="theme-swatch" data-theme="linear" onclick="setTheme('linear');closeThemeDropdown()" title="Linear"></div>
+            <div class="theme-swatch" data-theme="neon"   onclick="setTheme('neon');closeThemeDropdown()"   title="Neon"></div>
           </div>
+          <button class="btn-icon" id="btn-share-header" onclick="shareRoom()" title="Partager">🔗</button>
         </div>
       </div>
     </header>
@@ -80,23 +86,26 @@
     <div id="messages"></div>
 
     <footer>
-      <div id="recording-indicator" class="hidden">🎙️ Enregistrement…</div>
-      <div id="vad-listening" class="hidden">👂 En écoute…</div>
-      <div id="pause-indicator" class="hidden">⏸️ Traduction en pause</div>
+      <div class="hidden status-indicator recording" id="recording-indicator">
+        <div class="dot"></div> Enregistrement…
+      </div>
+      <div class="hidden status-indicator listening" id="vad-listening">
+        <div class="dot"></div> En écoute…
+      </div>
+      <div class="hidden status-indicator paused" id="pause-indicator">⏸ Traduction en pause</div>
+
       <div class="footer-controls">
-        <button id="btn-vad" onclick="toggleVAD()" title="Détection automatique de la voix">🤖</button>
-        <button id="btn-mic"
-          onmousedown="startRecording()"
-          onmouseup="stopRecording()"
-          ontouchstart="startRecording()"
-          ontouchend="stopRecording()">🎤</button>
-        <button id="btn-tts" onclick="toggleTTS()" title="Lecture vocale">🔊</button>
-        <button id="btn-pause" onclick="togglePause()" title="Mettre en pause la traduction">⏸️</button>
+        <button class="btn-sm" id="btn-vad" onclick="toggleVAD()" title="Mode auto">🤖</button>
+        <button id="btn-mic" onmousedown="startRecording()" onmouseup="stopRecording()"
+          ontouchstart="startRecording()" ontouchend="stopRecording()">🎤</button>
+        <button class="btn-sm active" id="btn-tts" onclick="toggleTTS()" title="Lecture vocale">🔊</button>
+        <button class="btn-sm" id="btn-pause" onclick="togglePause()" title="Pause">⏸️</button>
       </div>
-      <div class="footer-hint">🤖 Auto · 🎤 Maintenir pour parler · 🔊 Lecture vocale · ⏸️ Pause</div>
-      <div class="footer-hint" style="margin-top:4px">
-        <button id="btn-share" onclick="shareRoom()" title="Partager le lien de cette conversation">🔗 Partager le lien</button>
+
+      <div class="footer-hint" style="display:flex;align-items:center;gap:16px;">
+        <div>🤖 Auto <span class="sep">·</span> 🎤 Maintenir <span class="sep">·</span> 🔊 TTS <span class="sep">·</span> ⏸ Pause</div>
       </div>
+      <div style="margin-top:4px;"><button id="btn-share" onclick="shareRoom()">🔗 Partager le lien</button></div>
     </footer>
   </div>
 
