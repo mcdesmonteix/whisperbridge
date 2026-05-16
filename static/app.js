@@ -23,8 +23,9 @@ document.addEventListener('click', (e) => {
   }
 });
 
-// Applique le thème sauvegardé (défaut : glass)
-setTheme(localStorage.getItem('olivia-theme') || 'glass');
+// Applique le thème sauvegardé (défaut : aurora)
+setTheme((localStorage.getItem('olivia-theme') || 'aurora') || 'aurora');
+
 
 // ── Configuration des langues ──
 const LANGUAGES = {
@@ -136,11 +137,12 @@ let vadMaxTimer    = null;
 // ── Connexion ──
 
 function connectUser() {
-  const nameInput = document.getElementById("input-name").value.trim();
-  const lang      = document.getElementById("select-lang").value;
+  const currentTheme = localStorage.getItem('olivia-theme') || 'aurora';
+  const nameInput = document.getElementById("input-name-" + currentTheme).value.trim();
+  const lang      = document.getElementById("select-lang-" + currentTheme).value;
 
   if (!nameInput) {
-    document.getElementById("input-name").focus();
+    document.getElementById("input-name-" + currentTheme).focus();
     return;
   }
 
